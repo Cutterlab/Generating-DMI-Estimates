@@ -1,0 +1,35 @@
+The below script randomly generates 20 loci to act as DMI loci. It also instructs the generation of 300 sets of X number of replicate populations (in the below, 20 reps is define) in SLiM. It then generates estimates of DMI loci, and organizes the correct DMI loci into a table to be compared to the estimates in a separate script
+
+#!/bin/sh
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=80
+#SBATCH --time=23:59:59
+
+
+module load gnu-parallel gcc/8.3.0 r/3.6.1
+
+for i in {1..300}; do
+r1=$(shuf -i 0-41599999 -n 1)
+r2=$(shuf -i 0-41599999 -n 1)
+r3=$(shuf -i 0-41599999 -n 1)
+r4=$(shuf -i 0-41599999 -n 1)
+r5=$(shuf -i 0-41599999 -n 1)
+r6=$(shuf -i 0-41599999 -n 1)
+r7=$(shuf -i 0-41599999 -n 1)
+r8=$(shuf -i 0-41599999 -n 1)
+r9=$(shuf -i 0-41599999 -n 1)
+r10=$(shuf -i 0-41599999 -n 1)
+r11=$(shuf -i 0-41599999 -n 1)
+r12=$(shuf -i 0-41599999 -n 1)
+r13=$(shuf -i 0-41599999 -n 1)
+r14=$(shuf -i 0-41599999 -n 1)
+r15=$(shuf -i 0-41599999 -n 1)
+r16=$(shuf -i 0-41599999 -n 1)
+r17=$(shuf -i 0-41599999 -n 1)
+r18=$(shuf -i 0-41599999 -n 1)
+r19=$(shuf -i 0-41599999 -n 1)
+r20=$(shuf -i 0-41599999 -n 1)
+seq 1 20 | parallel "slim -d gt=${gt} -d s=${s} -d di1=${y} -d di2=${z} -d r1=${r1} -d r2=${r2} -d r3=${r3} -d r4=${r4} -d r5=${r5} -d r6=${r6} -d r7=${r7} -d r8=${r8} -d r9=${r9} -d r10=${r10} -d r11=${r11} -d r12=${r12} -d r13=${r13} -d r14=${r14} -d r15=${r15} -d r16=${r16} -d r17=${r17} -d r18=${r18} -d r19=${r19} -d r20=${r20}  ~/jobscript/multi20/multi.slim | tail -n +56 | sed 's/#OUT//g' > ~/scratch/multi20/${gt}.${s}.${y}.${z}/out_SEED{}.txt"
+Rscript ~/jobscript/multi20/step1.R ${gt} ${s} ${y} ${z} ${i}
+Rscript ~/jobscript/multi20/correctloci.R ${r1} ${r2} ${r3} ${r4} ${r5} ${r6} ${r7} ${r8} ${r9} ${r10} ${r11} ${r12} ${r13} ${r14} ${r15} ${r16} ${r17} ${r18} ${r19} ${r20}  >> ~/scratch/multi20/${gt}.${s}.${y}.${z}/${i}.sh 
+
