@@ -1,0 +1,178 @@
+SLIM SCRIPT – ONE-WAY 2-LOCI
+
+initialize () {
+initializeSLiMOptions (nucleotideBased= T);
+
+
+ if (di1 == 1) #setting dominance 
+ {da1= 0;};       
+ 
+ 
+ if (di1 == 0)
+ {da1= 1;}; 
+ 
+ 
+  
+ if (di2 == 1)
+ {da2= 0;};       
+ 
+ 
+ if (di2 == 0)
+ {da2= 1;}; 
+        
+        wq = "gt";
+
+
+	defineConstant("g2", wq);
+	defineConstant ("L",  41600000);  //defining genome length 
+	initializeAncestralNucleotides(randomNucleotides(L));
+
+
+
+
+		initializeMutationTypeNuc("m1", di1, "f", 0.0); //initializing DMI mutation m1 (genome 1, parental species 1)
+		
+	
+	m1.color = "blue";
+	
+			m1.convertToSubstitution = F; //setting convertToSubstitution as False to avoid removal of fixed mutations
+	
+	initializeMutationTypeNuc("m15", da1 , "f", 0.0); //initializing ancestral mutation m15 (genome 1, parental species 1)
+		
+	
+	m15.color = "purple";
+	
+			m15.convertToSubstitution = F;
+	
+	initializeMutationTypeNuc("m2", da2, "f", 0.0); //initializing ancestral mutation m2 (genome 2, parental species 2)
+		
+
+	
+	m2.color = "orange"; 
+	
+			m2.convertToSubstitution = F;
+	
+	initializeMutationTypeNuc("m25", di2, "f", 0.0); //initializing DMI mutation m25 (genome 2, parental species 2)
+		
+
+	
+	m25.color = "red";
+	
+			m25.convertToSubstitution = F;
+			
+			
+			initializeMutationTypeNuc("m5", 0.0, "f", 0.0); //initializing neutral mutations (genome 1, parental species 1)
+	
+	m5.color = "white";
+	
+			m5.convertToSubstitution = F;
+
+
+	initializeMutationTypeNuc("m6", 0.0, "f", 0.0); //initializing neutral mutations (genome 2, parental species 2)
+	
+	m6.color = "yellow";
+	
+			m6.convertToSubstitution = F;
+			
+		
+	// g1 genomic element type: uses m1 for all mutations
+	initializeGenomicElementType("g1", m6, 1.0, mmJukesCantor(0/3));
+	// uniform chromosome of length 100 kb with uniform recombination
+	initializeGenomicElement(g1, 0, L-1);
+	
+
+rates = c(4e-8, 1e-8, 4e-8, 0.5, 4e-8, 1e-8, 4e-8); //recombination rates across two chromosomes (separated by a rate of 0.5)
+	
+	ends = c(5199999, 15599999, 20799999, 20800000, 25999999, 36399999, 41599999);
+	
+	
+	initializeRecombinationRate(rates, ends);
+	
+	}
+
+
+// create a population of 1000 individuals
+1 {
+	sim.addSubpop("p1", 1000);
+	sim.rescheduleScriptBlock(s1, start=gt, end=gt);
+}
+
+//add DMI mutation m1 from parental species 1 at locus 2601040 (allele A)
+1 late () { 
+g = p1.individuals.genome1;
+g.addNewDrawnMutation(m1,2601040, nucleotide = "A");
+
+//add ancestral mutation m15 from parental species 1 at locus 3120140
+}
+
+1 late () {
+g = p1.individuals.genome1;
+g.addNewDrawnMutation(m15, 31201040, nucleotide = "A" );
+
+}
+
+
+//add ancestral mutation m2 from parental species 2 at locus 2601040 (Allele C)
+1 late () {
+g = p1.individuals.genome2;
+g.addNewDrawnMutation(m2, 2601040, nucleotide = "C" );
+}
+
+//add DMI mutation m25 from parental species 2 at locus 3120140
+1 late () {
+g = p1.individuals.genome2;
+g.addNewDrawnMutation(m25, 31201040, nucleotide = "C" );
+}
+
+
+//distribute neutral mutations m5 across genome 1
+1 late () {
+g = p1.individuals.genome1;
+target1 = sample (g, N);
+q = 0:19999;
+b = q * (2080);
+target1.addNewDrawnMutation(m5, b, nucleotide = "A");
+}
+
+//distribute neutral mutations m6 across genome 2
+
+1 late () {
+g = p1.individuals.genome2;
+target1 = sample (g, N);
+q = 0:19999;
+d = q * (2080);
+target1.addNewDrawnMutation(m6, d, nucleotide = "C");
+}
+
+//add neutral mutation m5 at last loci 41599999, which is not carried out in the above command 
+
+1 late () {
+g = p1.individuals.genome1;
+target1 = sample (g, N);
+target1.addNewDrawnMutation(m5, 41599999, nucleotide = "A");
+}
+
+//add neutral mutation m6 at last loci 41599999, which is not carried out in the above command 
+
+1 late () {
+g = p1.individuals.genome2;
+target1 = sample (g, N);
+target1.addNewDrawnMutation(m6, 41599999, nucleotide = "C");
+}	
+
+//run for 1000 generations
+//s1, is defined as referring to the script block for the event
+s1 1000 late() { 
+	sim.outputMutations(sim.mutations);
+}
+
+//defines negative fitness effects of DMI mutations residing in same genome
+//if an individual contains DMI mutation m1 and m25 in the same genome, return negative fitness effect of s (variable defined at command line)
+
+fitness(m1) { 
+	if (genome1.containsMarkerMutation(m25,  31201040)) return s;
+	else if (genome2.containsMarkerMutation(m25, 31201040)) return s;
+	else return relFitness; }
+
+
+
