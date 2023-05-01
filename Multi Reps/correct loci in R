@@ -1,0 +1,31 @@
+The below R script defines in a table the 20 DMI loci
+
+args <- commandArgs(trailingOnly = TRUE)
+gt=as.numeric(commandArgs(TRUE)[1])
+if (is.na(gt)) { gt=10}
+r1 <- commandArgs(trailingOnly = TRUE)
+r2 <- commandArgs(trailingOnly = TRUE)
+r3 <- commandArgs(trailingOnly = TRUE)
+r4 <- commandArgs(trailingOnly = TRUE)
+r5 <- commandArgs(trailingOnly = TRUE)
+r6 <- commandArgs(trailingOnly = TRUE)
+r7 <- commandArgs(trailingOnly = TRUE)
+r8 <- commandArgs(trailingOnly = TRUE)
+r9 <- commandArgs(trailingOnly = TRUE)
+r10 <- commandArgs(trailingOnly = TRUE)
+r11 <- commandArgs(trailingOnly = TRUE)
+r12 <- commandArgs(trailingOnly = TRUE)
+r13 <- commandArgs(trailingOnly = TRUE)
+r14 <- commandArgs(trailingOnly = TRUE)
+r15 <- commandArgs(trailingOnly = TRUE)
+r16 <- commandArgs(trailingOnly = TRUE)
+r17 <- commandArgs(trailingOnly = TRUE)
+r18 <- commandArgs(trailingOnly = TRUE)
+r19 <- commandArgs(trailingOnly = TRUE)
+r20 <- commandArgs(trailingOnly = TRUE)
+
+
+all <- cbind(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r18, r19, r20)
+
+write.table(all, sep=" ", quote= FALSE, col.names = FALSE, row.names = FALSE) 
+
