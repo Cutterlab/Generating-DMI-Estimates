@@ -1,0 +1,13 @@
+The below script runs the “Generating 2.5th and 97.5th quantiles in R” file for each generation timepoint (variable X below)
+
+
+
+#!/bin/sh
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=80
+#SBATCH --time=10:00:00
+
+
+module load gnu-parallel gcc/8.3.0 r/3.6.1
+
+Rscript ~/jobscript/oneway/neutral/y.R X > ~/scratch/oneway/neutral/Xgt/Xy.sh
