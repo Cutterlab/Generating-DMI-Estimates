@@ -1,0 +1,1040 @@
+
+#The below R script takes the 300 output estimate files and summarizes the estimate accuracies and precision values
+
+
+args <- commandArgs(trailingOnly = TRUE)
+gt=as.numeric(commandArgs(TRUE)[1])
+if (is.na(gt)) {gt=250}
+s=as.numeric(commandArgs(TRUE)[2])
+if (is.na(s)) {s=0.8}
+di1=as.numeric(commandArgs(TRUE)[3])
+if (is.na(di1)) {di1=1}
+di2=as.numeric(commandArgs(TRUE)[4])
+if (is.na(di2)) {di2=1}
+
+q1 <- "~/scratch/multi20/"    
+q2 <- paste(q1, gt, sep="")
+q3 <- paste(q2, ".", sep= "")
+q4 <- paste(q3, s, sep= "")
+q5 <- paste(q4, ".", sep= "")
+q6 <- paste(q5, di1, sep= "")
+q7 <- paste(q6, ".", sep= "")
+q8 <- paste(q7, di2, sep= "")
+
+vcffiles = dir(path = q8, pattern=".text")
+
+reps= 300
+n = 1000
+
+library(dplyr)
+library(tidyr)
+library(matrixStats)
+
+
+
+
+##
+
+
+
+out.file5 <- numeric()
+
+
+
+#a <- 3
+
+
+rn <- sample(1:reps, reps)
+
+
+for (i in 1:length(rn)) {
+  #  number <-  i
+  setwd(q8) 
+  #print(i)
+  # print(vcffiles[i])
+  
+  vcff <- as.character(vcffiles[i])
+  vcff <- strsplit(vcff, ".text")
+  vcff <- as.numeric(vcff)
+  #print(vcff)
+  number <-  vcff
+  
+  
+  #print(number)
+  
+  
+  
+  
+  
+  df= as.matrix(read.csv(vcffiles[i], head = F))
+  df <- as.data.frame(df) 
+  
+  newdf <-  nrow(df %>% subset(grepl('NA', df[,1])))
+  
+  if  (newdf != nrow(df)) {
+    #select(df, contains("[19991]"))
+    
+    library(stringr)
+    
+    colnames(df) <- c("orig")
+    
+    y <- as.data.frame(str_split_fixed(df$orig, " ", 7))
+    
+    
+    colnames(y) <- c("a", "b", "c", "d", "e", "f", "g")
+    y <- as.data.frame(y)
+    n <- str_split_fixed(y$g, " ", 3)
+    other <- cbind(y[,1:6], n)
+    
+    other <- as.data.frame(as.matrix(other))
+    colnames(other) <- c("a", "b", "c", "d", "e", "f", "g", "h", "i")
+    #first<- other %>% filter(grepl('first'), c)
+    #last <- other %>% filter(grepl('Last')
+    
+    #first
+    
+    first <- other %>% subset(grepl('first', e:f))
+    first2 <- other %>% subset(grepl('first', c:d))
+    first3 <- other %>% subset(grepl('first', a:b))
+    first4 <- other %>% subset(grepl('first', g:i))
+    first <- rbind(first, first2, first3, first4)
+    colnames(first) <- c("a", "b", "c", "d", "e", "f", "g", "h", "e")
+    
+    library(gt)
+    
+    
+    out.file1 <- numeric()
+    
+    if (nrow(first) != 0)  {
+      for (i in 1:nrow(first)) {
+        if (first[i, 1] == "firstfirstfirstfirstfirst") {
+          firstlocus  <- as.character(first[i, 4])
+          firstnumber <- as.character(first[i, 3])
+        }
+        if (first[i, 2] == "firstfirstfirstfirstfirst") {
+          firstlocus  <- as.character(first[i, 5])
+          firstnumber <- as.character(first[i, 4])
+        }
+        if (first[i, 3] == "firstfirstfirstfirstfirst") {
+          firstlocus <- as.character(first[i, 6])
+          firstnumber <- as.character(first[i, 5])
+        }
+        
+        if (first[i, 4] == "firstfirstfirstfirstfirst") {
+          firstlocus  <- as.character(first[i, 7])
+          firstnumber <- as.character(first[i, 6])
+        }
+        if (first[i, 5] == "firstfirstfirstfirstfirst") {
+          firstlocus <- as.character(first[i, 8])
+          firstnumber <- as.character(first[i, 7])
+        }
+        if (first[i, 6] == "firstfirstfirstfirstfirst") {
+          firstlocus  <- as.character(first[i, 9])
+          firstnumber <- as.character(first[i, 8])
+        }
+        df <- cbind(firstlocus, firstnumber)
+        out.file1 <- as.data.frame(rbind(df, out.file1))
+      } 
+    }
+    #out.file1 <- as.character(out.file1)
+    #  print("numberfirst")  
+    
+    out.file1[sapply(out.file1, is.factor)] <- lapply(out.file1[sapply(out.file1, is.factor)], function(x) as.numeric(as.character(x)))
+    
+    out.file1 <- as.data.frame(as.matrix(out.file1))
+    
+    first <- out.file1[order(out.file1$firstlocus),]
+    
+    #last
+    
+    
+    last <- other %>% subset(grepl('last', e:f))
+    last2 <- other %>% subset(grepl('last', c:d))
+    last3 <- other %>% subset(grepl('last', a:b))
+    last4 <- other %>% subset(grepl('last', g:i))
+    last <- rbind(last, last2, last3, last4)
+    colnames(last) <- c("a", "b", "c", "d", "e", "f", "g", "h", "e")
+    
+    library(gt)
+    
+    
+    
+    out.file1 <- numeric()
+    
+    if (nrow(last) != 0)  {
+      for (i in 1:nrow(last)) {
+        if (last[i, 1] == "lastlastlastlastlast") {
+          lastlocus  <- as.character(last[i, 4])
+          lastnumber <- as.character(last[i, 3])
+        }
+        if (last[i, 2] == "lastlastlastlastlast") {
+          lastlocus  <- as.character(last[i, 5])
+          lastnumber <- as.character(last[i, 4])
+        }
+        if (last[i, 3] == "lastlastlastlastlast") {
+          lastlocus <- as.character(last[i, 6])
+          lastnumber <- as.character(last[i, 5])
+        }
+        
+        if (last[i, 4] == "lastlastlastlastlast") {
+          lastlocus  <- as.character(last[i, 7])
+          lastnumber <- as.character(last[i, 6])
+        }
+        if (last[i, 5] == "lastlastlastlastlast") {
+          lastlocus <- as.character(last[i, 8])
+          lastnumber <- as.character(last[i, 7])
+        }
+        if (last[i, 6] == "lastlastlastlastlast") {
+          lastlocus  <- as.character(last[i, 9])
+          lastnumber <- as.character(last[i, 8])
+        }
+        df <- cbind(lastlocus, lastnumber)
+        out.file1 <- as.data.frame(rbind(df, out.file1))
+      } 
+    }
+    
+    #out.file1 <- as.character(out.file1)
+    #  print("last")
+    out.file1[sapply(out.file1, is.factor)] <- lapply(out.file1[sapply(out.file1, is.factor)], function(x) as.numeric(as.character(x)))
+    
+    out.file1 <- as.data.frame(as.matrix(out.file1))
+    
+    last <- out.file1[order(out.file1$lastlocus),]
+    
+    bind <- cbind(first, last)
+    bind <- as.data.frame(bind)
+    
+    #  print("last2")
+    out.file1 <- numeric()
+    for (i in 1:nrow(bind)) {
+      y2 <- bind$lastlocus[i] - bind$firstlocus[i]
+      y2 <- cbind(y2, bind$firstlocus[i], bind$lastlocus[i])
+      out.file1 <- rbind(out.file1, y2)
+    }
+    
+    #  print("numberother")
+    colnames(out.file1) <- c("lengthofestimate", "firstlocus", "lastlocus")
+    
+    all <- out.file1
+    
+    #1 locus estimates 
+    
+    
+    
+    last <- other %>% subset(grepl('and', e:f))
+    last2 <- other %>% subset(grepl('and', c:d))
+    last3 <- other %>% subset(grepl('and', a:b))
+    last4 <- other %>% subset(grepl('and', g:i))
+    last <- rbind(last, last2, last3, last4)
+    colnames(last) <- c("a", "b", "c", "d", "e", "f", "g", "h", "e")
+    
+    
+    out.file1 <- numeric()
+    
+    if (nrow(last) != 0)  {
+      for (i in 1:nrow(last)) {
+        if (last[i, 1] == "and") {
+          lastlocus  <- as.character(last[i, 5])
+          lastnumber <- as.character(last[i, 4])
+          #check <- 1
+        }
+        else if (last[i, 2] == "and") {
+          lastlocus  <- as.character(last[i, 6])
+          lastnumber <- as.character(last[i, 5])
+          # check <- 1
+        }
+        else if (last[i, 3] == "and") {
+          lastlocus <- as.character(last[i, 7])
+          lastnumber <- as.character(last[i, 6])
+          #check <- 1
+        }
+        
+        else if (last[i, 4] == "and") {
+          lastlocus  <- as.character(last[i, 8])
+          lastnumber <- as.character(last[i, 7])
+          #check <- 1
+        }
+        else if (last[i, 5] == "and") {
+          lastlocus <- as.character(last[i, 9])
+          lastnumber <- as.character(last[i, 8])
+          #check <- 1
+        }
+        
+        # else  {
+        #  lastlocus <- NA
+        # lastnumber <- NA
+        #check <- 0 
+        #}
+        df <- cbind(lastlocus, lastnumber)
+        out.file1 <- as.data.frame(rbind(df, out.file1))
+      }
+    }
+    #  print("and")
+    both <- out.file1
+    both <- as.data.frame(both)
+    both[sapply(both, is.factor)] <- lapply(both[sapply(both, is.factor)], function(x) as.numeric(as.character(x)))
+    
+    both2 <- both$lastlocus
+    
+    lengthofestimate <- rep(1, times = nrow(both), length.out = NA, each = 1)
+    
+    both3 <- cbind(lengthofestimate, both2,  both$lastlocus)
+    
+    colnames(both3) <- c("lengthofestimate", "firstlocus", "lastlocus")
+    
+    all <- as.data.frame(rbind(both3, all))
+    
+    all2 <- all[order(all$firstlocus),] 
+    all2 <- cbind(all2, number)
+    
+    out.file5 <-rbind(out.file5, all2)
+  }}
+
+# print("number1") 
+
+library(dplyr)
+
+new <- as.data.frame(out.file5)
+
+new <- as.matrix(out.file5)
+
+new <- as.data.frame(out.file5)
+
+#newsecond
+trying1 <- new[order(new$firstlocus),]
+
+out.file6 <- numeric()
+out.file28 <- numeric()
+
+rn <- unique(trying1$number)
+for (b in rn) {
+  trying <- filter(trying1, number == b) 
+  
+  #trying <- as.data.frame(trying, row.names = FALSE)
+  
+  row.names(trying) <- c()
+  
+  out.file1 <- numeric()
+  
+  lst <- nrow(trying) - 1
+  
+  lst2 <-  nrow(trying)
+  
+  #oct17
+  if (nrow(trying) > 1) 
+  {
+    #oct17
+    for (i in 1:nrow(trying[1:lst,]))
+    { 
+      if (trying[(i+1), 2] - trying[i, 3] <=  6240) {
+        y <- "TRUE"
+        # print(y)
+        # print(i)
+        # print(trying[i, 2])
+        
+      }
+      else if (trying[(i+1), 2] - trying[i, 3] >  6240) {
+        y <- "FALSE"
+        # print(y)
+        # print(i)
+        # print(trying[i, 2])
+      }
+      y <- cbind(y, trying[i,])
+      #y <- cbind(y, i)
+      out.file1 <- rbind(y, out.file1)
+    }
+    
+    
+    
+    
+    y<- "FALSE"
+    false <- cbind(y, trying[lst2,])
+    out.file1 <- rbind(out.file1,false)
+    row.names(out.file1) <- c()
+    
+    out.file1 <- out.file1[order(out.file1$firstlocus),]
+    
+    row.names(out.file1) <- c()
+    out.file2 <- numeric()
+    for (i in 1:nrow(out.file1))
+    { 
+      if (out.file1[(i), 1] == TRUE) {
+        new2 <- as.data.frame(cbind(out.file1[(i), 2], out.file1[(i), 3], out.file1[(i+1), 4], out.file1[(i), 5]))
+      }
+      else if (out.file1[(i), 1] == FALSE) {
+        new2 <- NULL
+      }
+      out.file2 <- rbind(out.file2, new2)
+    }
+    
+    
+    
+    out.file3 <- numeric()
+    for (i in 2:nrow(out.file1))
+    { 
+      if (out.file1[(i-1), 1] == TRUE & out.file1[(i), 1] == FALSE) {
+        new3 <- NULL
+      }
+      else {
+        new3 <- out.file1[i,]
+      }
+      out.file3 <- rbind(new3, out.file3)
+    }
+    
+    out.file3 <- rbind(out.file1[1,], out.file3)
+    out.file3 <- filter(out.file3, y == FALSE)
+    
+    
+    out.file3 <- out.file3[,3:5]
+    colnames(out.file3) <-c("first", "last", "num")
+    
+    if (length(out.file2) > 0) {
+      out.file2 <- out.file2[,2:4]
+      out.file2 <- as.data.frame(out.file2)
+      out.file2 <- as.data.frame(out.file2)
+      colnames(out.file2) <- c("first", "last", "num")
+      row.names(out.file2) <- c()
+      final <- rbind(out.file3, out.file2)
+    }
+    else {
+      final <- out.file3 
+    }
+    
+    final <- final[order(final$first),]
+    
+    #FILER 1 BPs
+    
+    estimatelength <- (final$last -final$first) + 1
+    
+    final <- cbind(estimatelength, final)
+    
+    #final <- filter(final, final$estimatelength >  6240)
+    
+    
+    out.file3 <- numeric()
+    for (i in 1:nrow(final))
+    { 
+      if (i > 1) 
+      {
+        if (final[(i), 2] <= final[(i-1), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-1), 2], final[(i), 3], final[(i-1), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 2) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-2), 2], final[(i), 3], final[(i-2), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 3) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-3), 2], final[(i), 3], final[(i-3), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 4) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-4), 2], final[(i), 3], final[(i-4), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 5) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-5), 2], final[(i), 3], final[(i-5), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 6) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-6), 2], final[(i), 3], final[(i-6), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 7) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-7), 2], final[(i), 3], final[(i-7), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      else {
+        new4 <- final[i,2:4]
+      }
+      colnames(new4) <- c("first", "last", "num")
+      out.file3 <- rbind(out.file3, new4)
+    }
+    
+    estimatelength <- (out.file3$last -out.file3$first) + 1
+    
+    final <- cbind(estimatelength, out.file3) 
+    
+    
+    
+    out.file3 <- numeric()
+    for (i in 1:nrow(final))
+    { 
+      if (i > 1) 
+      {
+        if (final[(i), 2] <= final[(i-1), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-1), 2], final[(i), 3], final[(i-1), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 2) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-2), 2], final[(i), 3], final[(i-2), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 3) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-3), 2], final[(i), 3], final[(i-3), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 4) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-4), 2], final[(i), 3], final[(i-4), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 5) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-5), 2], final[(i), 3], final[(i-5), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 6) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-6), 2], final[(i), 3], final[(i-6), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 7) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-7), 2], final[(i), 3], final[(i-7), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      else {
+        new4 <- final[i,2:4]
+      }
+      colnames(new4) <- c("first", "last", "num")
+      out.file3 <- rbind(out.file3, new4)
+    }
+    
+    
+    estimatelength <- (out.file3$last -out.file3$first) + 1
+    
+    final <- cbind(estimatelength, out.file3) 
+    
+    out.file3 <- numeric()
+    for (i in 1:nrow(final))
+    { 
+      if (i > 1) 
+      {
+        if (final[(i), 2] <= final[(i-1), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-1), 2], final[(i), 3], final[(i-1), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 2) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-2), 2], final[(i), 3], final[(i-2), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 3) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-3), 2], final[(i), 3], final[(i-3), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 4) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-4), 2], final[(i), 3], final[(i-4), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 5) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-5), 2], final[(i), 3], final[(i-5), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 6) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-6), 2], final[(i), 3], final[(i-6), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 7) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-7), 2], final[(i), 3], final[(i-7), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      else {
+        new4 <- final[i,2:4]
+      }
+      colnames(new4) <- c("first", "last", "num")
+      out.file3 <- rbind(out.file3, new4)
+    }
+    
+    estimatelength <- (out.file3$last -out.file3$first) + 1
+    
+    final <- cbind(estimatelength, out.file3) 
+    
+    out.file3 <- numeric()
+    for (i in 1:nrow(final))
+    { 
+      if (i > 1) 
+      {
+        if (final[(i), 2] <= final[(i-1), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-1), 2], final[(i), 3], final[(i-1), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 2) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-2), 2], final[(i), 3], final[(i-2), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 3) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-3), 2], final[(i), 3], final[(i-3), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 4) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-4), 2], final[(i), 3], final[(i-4), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 5) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-5), 2], final[(i), 3], final[(i-5), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 6) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-6), 2], final[(i), 3], final[(i-6), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      
+      else if (i > 7) 
+      {
+        if (final[(i), 2] <= final[(i-2), 3]) {
+          new4 <- as.data.frame(cbind(final[(i-7), 2], final[(i), 3], final[(i-7), 4]))
+        }
+        else {
+          new4 <- final[i,2:4]
+        }
+      }
+      else {
+        new4 <- final[i,2:4]
+      }
+      colnames(new4) <- c("first", "last", "num")
+      out.file3 <- rbind(out.file3, new4)
+    }
+    
+    estimatelength <- (out.file3$last -out.file3$first) + 1
+    
+    final <- cbind(estimatelength, out.file3) 
+    
+    
+    
+    
+    
+    n_occur <- data.frame(table(out.file3$first))
+    
+    n_occur<- n_occur[n_occur$Freq > 1,]
+    
+    
+    out.file4 <- numeric()
+    if  (nrow(n_occur) > 0) {
+      for (i in 1:nrow(n_occur))
+      { 
+        x <- n_occur[i,1]
+        df <- filter(out.file3, out.file3$first == x)
+        df2 <- which.max(df$last) 
+        df3 <- df[df2,]
+        out.file4 <- rbind(df3, out.file4)
+      }
+      n = out.file4[,1]
+      n = as.data.frame(n)
+      
+      for (i in 1:nrow(n)) {
+        final <- filter(final, final$first != n[i,])
+      }
+      
+      estimatelength <- (out.file4$last - out.file4$first) + 1
+      
+      out.file4 <- cbind(estimatelength, out.file4)
+      this <- rbind(out.file4, final)
+      
+      
+      
+      final<- this[order(this$last),]
+    }
+    
+    final <- filter(final, final$estimatelength >  6240)
+    
+    final <- cbind(final, b)
+    out.file6 <- rbind(out.file6, final)
+  }
+  
+  else if (nrow(trying) == 1)  {
+    
+    ones <- trying
+    
+    out.file28 <- rbind(out.file28, ones)
+  }
+}
+
+
+new <- out.file6
+
+new <- new[,1:4]
+
+colnames(new) <- c("lengthofestimate", "firstlocus", "lastlocus", "number")
+
+new <- rbind(new, out.file28)
+#rest
+
+out.file55 <- numeric()
+
+out.file27 <- numeric()
+
+out.file552 <- numeric()
+out.file272 <- numeric()
+
+#new
+numbers <- out.file5$number
+#new
+numbers <- unique(numbers)
+#reps new
+for (d in numbers) {
+  one2 <- filter(new, new$number == d) 
+  
+  numberofestimates <- nrow(one2) 
+  indx <- sapply(one2, is.factor)
+  one2[indx] <- lapply(one2[indx], function(x) as.numeric(as.character(x)))
+  
+  
+  qi <- paste(d, ".sh", sep="")
+  q9 <- paste(q8, "/", sep="")
+  q11 <- paste(q9, qi, sep="")
+  ##
+  # print(q11)
+  #  print(d)
+  #lengthofestimate <- as.character(one2$lengthofestimate)
+  #firstlocus <- as.character(one2$firstlocus)
+  #lastlocus <- as.character(one2$lastlocus)
+  
+  
+  
+  one <- read.table(q11, sep=',', header = FALSE) 
+  
+  one <- as.data.frame(one)
+  
+  # one <- as.integer(one)
+  
+  y <- str_split_fixed(one[,1],n = 2, pattern = " ")
+  
+  y <- as.data.frame(y[,1])
+  
+  y <- as.matrix(y)
+  
+  y <- as.integer(y)
+  
+  y <- as.data.frame(y)
+  
+  #one3[] <- lapply(one3, function(x) {
+  # if(is.factor(one3)) as.numeric(as.character(x)) else x
+  #})
+  #sapply(one3, class)
+  
+  #one3 <- as.data.frame(sapply(one2[,1:4], as.numeric))
+  one2 <- as.data.frame(one2) 
+  
+  out.file <- numeric()
+  out.file2 <- numeric()
+  for (i in 1:nrow(y))
+  {
+    for (a in 1:nrow(one2))
+    { 
+      if (y[i,] >= one2[a, 2] & y[i,] <= one2[a, 3]){ 
+        est = "correctestimate" 
+        est = cbind(est, y[i,]) 
+        est = cbind(est, a ) 
+        pasted = cbind(one2[a,], est)
+      }
+      else  {
+        est = "incorrectestimate" 
+        est = cbind(est, y[i,]) 
+        est = cbind (est, a ) 
+        pasted = cbind(one2[a,], est)
+      }
+      out.file <-rbind(out.file, pasted)
+    }
+  }
+  
+  # 
+  # 
+  # out.file <- numeric()
+  # out.file2 <- numeric()
+  # for (i in 1:nrow(y))
+  # {
+  #   for (a in 1:nrow(one2))
+  #   { 
+  #     if (y[i,] >= one2[a, 2] & y[i,] <= one2[a, 3]){ 
+  #       est = "correctestimate" 
+  #       est = cbind(est, y[i,]) 
+  #       est = cbind(est, a ) 
+  #       pasted = cbind(one2[a,], est)
+  #       out.file <-rbind(out.file, pasted)
+  #     }
+  #   }
+  # }
+  # 
+  # print("number2")
+  
+  estimates <- out.file
+  
+  estimates2 = filter(out.file, out.file$est == "correctestimate")
+  
+  # print("number3")
+  
+  #   ###all
+  #   if (nrow(estimates) > 0) {
+  #     estimates = cbind(estimates, d)
+  #   } else if (nrow(estimates) < 1) {
+  #     estimates = c(0, 0, 0, d, 0, 0, 0, d)
+  #     estimates <- data.frame(matrix(nrow = 1,data =  estimates))
+  #     estimates = as.data.frame(estimates)
+  #     colnames(estimates) <- c("lengthofestimate", "firstlocus", "lastlocus", "number", "est", "V2", "a", "d")
+  #   }
+  #   
+  #   #  print("number4")  
+  #   out.file55 <- rbind(estimates, out.file55)
+  #   out.file27 <- rbind(numberofestimates, out.file27)
+  # 
+  # ###all
+  
+  
+  ###correct
+  if (nrow(estimates2) > 0) {
+    estimates2 = cbind(estimates2, d)
+  } else if (nrow(estimates2) < 1) {
+    estimates2 = c(0, 0, 0, d, 0, 0, 0, d)
+    estimates2 <- data.frame(matrix(nrow = 1,data =  estimates2))
+    estimates2 = as.data.frame(estimates2)
+    colnames(estimates2) <- c("lengthofestimate", "firstlocus", "lastlocus", "number", "est", "V2", "a", "d")
+  }
+  
+  #  print("number4")  
+  out.file552 <- rbind(estimates2, out.file552)
+  out.file272 <- rbind(numberofestimates, out.file272)
+}
+###correct
+
+#if (y[i,] < one2[a, 2] & y[i,] > one2[a, 3])
+
+
+out.file56 <- numeric()
+
+
+#new
+for (i in numbers) {
+  one2 <- filter(new, new$number == i) 
+  one3 <- filter(out.file552, out.file552$number == i) 
+  numberofestimates <- nrow(one2)
+  numcorrectestimates <- nrow(one3)/20 
+  medianwidth <- median(one2$lengthofestimate)
+  #new
+  suml <- sum(one2$lengthofestimate)
+  #newshortestlength
+  minimum <- min(one2$lengthofestimate)
+  filtered <- filter(one2, lengthofestimate == minimum)
+  percmin <- nrow(filtered)/nrow(one2)
+  truepositive <- nrow(one3)/numberofestimates
+  falsepositive <- 1 - truepositive
+  inverse <- numberofestimates/nrow(one3)
+  
+  
+  #new
+  estimatesum <- cbind(numcorrectestimates, numberofestimates, medianwidth, i, nrow(one3), suml, percmin, minimum, truepositive, falsepositive, inverse)
+  
+  
+  
+  
+  out.file56 <- rbind(estimatesum, out.file56)
+  
+}
+
+
+
+#out.file56$numcorrectestimates/out.file56$nnumberofestimates
+
+#new
+colnames(out.file56) <- c("fractionofcorrectestimates", "numberofestimates", "medianwidth", "number", "numberofcorrectestimates", "suml", "percmin", "minimum", "truepositive", "falsepositive", "inverse")
+
+out.file56 <- as.data.frame(out.file56)
+medianfractionofcorrestimates <- median(out.file56$fractionofcorrectestimates) 
+quantmedianfractionofcorrestimates2.5 <- quantile(out.file56$fractionofcorrectestimates, probs= 0.025)
+quantmedianfractionofcorrestimates97.5 <- quantile(out.file56$fractionofcorrectestimates, probs= 0.975)
+
+#new
+medianmedianwidth <- median(out.file56$medianwidth)
+quantmedianmedianwidth2.5 <- quantile(out.file56$medianwidth, probs= 0.025)
+quantmedianmedianwidth97.5 <- quantile(out.file56$medianwidth, probs= 0.975)
+#new
+suml <- median(out.file56$suml)
+quantsuml2.5 <- quantile(out.file56$suml, probs= 0.025)
+quantsuml97.5 <- quantile(out.file56$suml, probs= 0.975)
+#new
+percmin <- median(out.file56$percmin)
+quantpercmin2.5 <- quantile(out.file56$percmin, probs= 0.025)
+quantpercmin97.5 <- quantile(out.file56$percmin, probs= 0.975)
+#new
+minl <- median(out.file56$minimum)
+quantminl2.5 <- quantile(out.file56$minimum, probs= 0.025)
+quantminl97.5 <- quantile(out.file56$minimum, probs= 0.975)
+
+detectability <- length(numbers)/reps
+
+numberofestimates <- median(out.file56$numberofestimates)
+quantnumberofestimates2.5 <- quantile(out.file56$numberofestimates, probs= 0.025)
+quantnumberofestimatesl97.5 <- quantile(out.file56$numberofestimates, probs= 0.975)
+
+
+truepositive <- median(out.file56$truepositive)
+quanttruepositive2.5 <- quantile(out.file56$truepositive, probs= 0.025)
+quanttruepositive97.5 <- quantile(out.file56$truepositive, probs= 0.975)
+
+falsepositive <- median(out.file56$falsepositive)
+quantfalsepositive2.5 <- quantile(out.file56$falsepositive, probs= 0.025)
+quantfalsepositive97.5 <- quantile(out.file56$falsepositive, probs= 0.975)
+
+inversetp <- median(out.file56$inverse)
+quantinversetp2.5 <- quantile(out.file56$inverse, probs= 0.025)
+quantinversetp97.5 <- quantile(out.file56$inverse, probs= 0.975)
+
+
+summary <- cbind(gt, s, numberofestimates, quantnumberofestimates2.5, quantnumberofestimatesl97.5,  medianfractionofcorrestimates, quantmedianfractionofcorrestimates2.5, quantmedianfractionofcorrestimates97.5, medianmedianwidth, detectability, quantmedianmedianwidth97.5, quantmedianmedianwidth2.5, suml, quantsuml2.5,quantsuml97.5, percmin, quantpercmin2.5, quantpercmin97.5, minl, quantminl2.5, quantminl97.5, truepositive, quanttruepositive2.5, quanttruepositive97.5, falsepositive, quantfalsepositive2.5, quantfalsepositive97.5, inversetp, quantinversetp2.5, quantinversetp97.5)
+
+#colnames(summary) <- c("medianfractionofcorrestimates", "medianmedianwidth", "detectability", "quantmedianmedianwidth97.5", "quantmedianmedianwidth2.5", "suml", "quantsuml2.5", "quantsuml97.5", "percmin", "minl")
+
+#new 
+
+#detectability
+write.table(summary, sep=",", quote= FALSE, col.names = FALSE, row.names = FALSE) 
+
+
+
+
