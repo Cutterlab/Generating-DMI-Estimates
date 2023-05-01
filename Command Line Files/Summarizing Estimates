@@ -1,0 +1,14 @@
+The below script summarizes estimate summaries from 500 estimate files generated from 10 replicate SLiM populations for a particular paramater set (defined by generation timepoint (gt), selection coefficient (s), and dominance values (y) (z)
+
+
+#!/bin/sh
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=80
+#SBATCH --time=11:00:00
+
+
+module load gnu-parallel gcc/8.3.0 r/3.6.1
+
+Rscript ~/jobscript/populationx/summarizingestimatefiles.R > ~/scratch/populationx/gt.s.y.z/summary.sh
+
+
