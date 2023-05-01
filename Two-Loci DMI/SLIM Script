@@ -37,14 +37,14 @@ initializeSLiMOptions (nucleotideBased= T);
 	
 			m1.convertToSubstitution = F; //setting convertToSubstitution as False to avoid removal of fixed mutations
 	
-	initializeMutationTypeNuc("m15", da1 , "f", 0.0); //initializing ancestral mutation m15 (genome 1, parental species 1)
+	initializeMutationTypeNuc("m15", da1 , "f", 0.0); //initializing ancestral mutation (in one-way) m15 (genome 1, parental species 1)
 		
 	
 	m15.color = "purple";
 	
 			m15.convertToSubstitution = F;
 	
-	initializeMutationTypeNuc("m2", da2, "f", 0.0); //initializing ancestral mutation m2 (genome 2, parental species 2)
+	initializeMutationTypeNuc("m2", da2, "f", 0.0); //initializing ancestral mutation (in one-way) m2 (genome 2, parental species 2)
 		
 
 	
@@ -102,7 +102,7 @@ rates = c(4e-8, 1e-8, 4e-8, 0.5, 4e-8, 1e-8, 4e-8); //recombination rates across
 g = p1.individuals.genome1;
 g.addNewDrawnMutation(m1,2601040, nucleotide = "A");
 
-//add ancestral mutation m15 from parental species 1 at locus 3120140
+//add ancestral mutation (in one-way) m15 from parental species 1 at locus 3120140
 }
 
 1 late () {
@@ -112,7 +112,7 @@ g.addNewDrawnMutation(m15, 31201040, nucleotide = "A" );
 }
 
 
-//add ancestral mutation m2 from parental species 2 at locus 2601040 (Allele C)
+//add ancestral mutation (in one-way) m2 from parental species 2 at locus 2601040 (Allele C)
 1 late () {
 g = p1.individuals.genome2;
 g.addNewDrawnMutation(m2, 2601040, nucleotide = "C" );
@@ -169,10 +169,25 @@ s1 1000 late() {
 //defines negative fitness effects of DMI mutations residing in same genome
 //if an individual contains DMI mutation m1 and m25 in the same genome, return negative fitness effect of s (variable defined at command line)
 
+//One-Way DMI
 fitness(m1) { 
 	if (genome1.containsMarkerMutation(m25,  31201040)) return s;
 	else if (genome2.containsMarkerMutation(m25, 31201040)) return s;
 	else return relFitness; }
+	
+//Two-Way DMI
+
+fitness(m1) { 
+	if (genome1.containsMarkerMutation(m25,  31201040)) return s;
+	else if (genome2.containsMarkerMutation(m25, 31201040)) return s;
+	else return relFitness; }
+        
+        
+fitness(m2) {
+        if (genome1.containsMarkerMutation(m15,  31201040)) return s;
+        else if (genome2.containsMarkerMutation(m15, 31201040)) return s;
+        else return relFitness;  }
+
 
 
 
