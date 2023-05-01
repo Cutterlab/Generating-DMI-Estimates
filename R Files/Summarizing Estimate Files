@@ -1,0 +1,46 @@
+#Summarize 500 estimate files
+
+x <- "~/scratch/oneway/10.0.95.1.1/" #retrieve Estimate output files
+
+g <- paste(x, sep="")
+
+vcffiles = dir(path = g, pattern=".sh")
+
+out.file<- numeric()
+library(dplyr)
+library(tidyr)
+
+#Reformate Estimate output files
+out.file<- numeric()
+for (i in 1:length(vcffiles)){  #length(vcffiles))
+  setwd(g) 
+  lines = readLines(vcffiles[i]) 
+  ind1 <- seq(1, length(lines), by = 2)
+  ind2 <- seq(2, length(lines), by = 2)
+  out <- read.table(header = TRUE, text = c(
+    paste(lines[ind1], collapse = " "),
+    paste(lines[ind2], collapse = " ")
+  )) 
+  out.file <- rbind(out.file, out)
+} 
+
+#Divide add and divide Estimate Accuracy values by the number of Estimate Accuracy values (500) for overall Accuracy value
+
+estimateaccuracy1 <- sum(out.file$EstimateAccuracy1)/500 
+
+estimateaccuracy2 <- sum(out.file$EstimateAccuracy2)/500
+
+#Determine mean Estimate Fraction and Raw Widths (number of bp in an estimate) across number of Correct Estimates (500)for Chromosome 1
+accurateestimates1 <- filter(out.file, out.file$EstimateAccuracy1 == 1)
+meanwidthperc1 <- mean(accurateestimates1$FractionWidth1)
+meanwidthraw1 <- mean(accurateestimates1$RawWidth1)
+
+#Determine mean Estimate Fraction and Raw Widths (number of bp in an estimate) across number of Correct Estimates (500)for Chromosome 2
+
+accurateestimates2 <- filter(out.file, out.file$EstimateAccuracy2 == 1)
+meanwidthperc2 <- mean(accurateestimates2$FractionWidth2)
+meanwidthraw2 <- mean(accurateestimates2$RawWidth2)
+
+#Bind new summarized Estimate Outputs into one table
+cbind(estimateaccuracy1,estimateaccuracy2,meanwidthperc1, meanwidthraw1, meanwidthperc2, meanwidthraw2)
+
