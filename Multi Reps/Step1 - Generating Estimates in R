@@ -1,0 +1,312 @@
+args <- commandArgs(trailingOnly = TRUE)
+gt=as.numeric(commandArgs(TRUE)[1])
+if (is.na(gt)) { gt=10}
+#r <- as.numeric(commandArgs(TRUE)[1])
+reps = 20
+
+#Retrieve neutral population data with 2.5th and 97.5th quantiles
+p1 <- "~/scratch/multi/neutral/" 
+p2 <- paste(p1, gt, sep="")
+p3 <- paste(p2, "gt", sep= "")
+n = 1000
+
+library(dplyr)
+library(tidyr)
+library(matrixStats)
+
+y1 = "p3"
+
+yfile = dir(path = p3, pattern = ".sh")
+
+setwd (p3)
+
+y = read.table(yfile)
+
+y = as.matrix(y)
+
+colnames(y) = c("2.5%", "97.5%")
+
+s=as.numeric(commandArgs(TRUE)[2])
+di1=as.numeric(commandArgs(TRUE)[3])
+di2=as.numeric(commandArgs(TRUE)[4])
+i=as.numeric(commandArgs(TRUE)[5])
+lo = i
+
+rn <- sample(1:reps, reps)
+
+#Retrieve DMI population data
+q1 <- "~/scratch/multi20/"    
+q2 <- paste(q1, gt, sep="")
+q3 <- paste(q2, ".", sep= "")
+q4 <- paste(q3, s, sep= "")
+q5 <- paste(q4, ".", sep= "")
+q6 <- paste(q5, di1, sep= "")
+q7 <- paste(q6, ".", sep= "")
+q8 <- paste(q7, di2, sep= "")
+
+vcffiles = dir(path = q8, pattern=".txt")
+out.file<- numeric()
+for (i in rn){
+  number <- i 
+  setwd(q8) 
+  vcf = read.table(vcffiles[i], head = F) 
+  dataorder <- vcf[order(vcf$V7),] 
+  loci <- as.numeric(dataorder$V7) 
+  loci <- sort(loci, decreasing = FALSE) 
+  loci <- unique(loci) 
+  data <- filter(dataorder, V13 == "A")  
+  V7 <- as.numeric(data$V7) 
+  diff <- setdiff(loci, V7) 
+  data <- cbind(V7, data$V12)
+  lngth <- length(diff)
+  b <-  list(rep(0, lngth)) 
+  diffdata <- data.frame (diff, b) 
+  names(diffdata)[1] <- "V7"
+  names(diffdata)[2] <- "V2"
+  data<- as.data.frame(data)
+  good <- rbind(diffdata, data) 
+  good <- good[order(good$V7),]
+  df5 = cbind(good, number)
+  out.file <-rbind(out.file, df5)
+}
+
+
+freq2 <- out.file$V2/2
+freq2<- freq2/1000 #divide freq by population size
+out.file <- cbind(freq2, out.file)
+
+first <- mean(y[,1])
+second <-  mean(y[,2])
+
+
+first <- rep(first, nrow(out.file))
+second <- rep(second, nrow(out.file))
+
+y <- cbind(first, second)
+
+databind <- cbind(y, out.file)
+torf <- databind[,3] < databind[,1] | databind[,3] > databind[,2]
+
+
+torfn <- as.numeric(torf)
+
+torf2 <- cbind(torfn, databind)
+
+torf3 <- cbind(torf2$torfn, torf2$V7, torf2$number)
+
+torf3 <- cbind(torf3)
+
+colnames(torf3) <- c("Extreme", "GenomePosition", "number")
+
+
+
+torf3<- as.data.frame(torf3)
+
+torf4 <- torf3 %>% 
+  pivot_wider(names_prefix = " ", names_from = GenomePosition, values_from = Extreme)
+
+torf4 <- as.data.frame(torf4)
+
+
+colsums <- colSums(torf4)
+lngth <- length(colsums)
+colsums <-colsums[2:lngth]
+colsums <- as.matrix(colsums)
+
+
+colsums3 <- reps - colsums
+#colsums4 <- as.matrix(rep(colsums3, length(colsums)))
+g <- cbind(colsums, colsums3)#colsums23 is neutral
+#gwallele <- cbind(g, torf3$GenomePosition)
+
+
+library(DescTools)
+library(rapportools)
+out.file1<- numeric()
+out.file2 <- numeric()
+out.file3 <- numeric() 
+out.file4 <- numeric ()
+
+#perform GTest on DMI population allele frequencies to locate extreme DMI frequencies to generate DMI location estimates 
+
+for (i in 1:nrow(g)) {
+  number <- i
+  if (g[number,1] | g[number,2] > 0) {
+    observed = c(g[number,1], g[number,2])
+    
+    expected <- c(0.05, 0.95)
+    
+    Gtest<- GTest(x=observed, p=expected, correct= "none")
+    
+    yg <- htest.short(Gtest)
+    yg <- as.data.frame(yg)
+    yg2 <- yg[2,]
+    
+    out.file2 <- rbind(out.file2, observed)
+    out.file1 <- rbind(out.file1, yg2)
+    #out.file1 <- rbind(out.file1, yg2)
+    
+    
+    
+  }
+  
+  # 
+  else if ((g[number,1] & g[number,2]) == 0) {
+    observed2 = c(g[number,1], g[number,2])
+    y3 <- 1 #pvalue
+    
+    out.file3 <- rbind(out.file3, observed2)
+    out.file4 <- cbind(out.file4, y3)
+    #finalg2 <- rbind(gtestfile2, gtestfile)
+    
+  }
+  
+  
+}
+
+good5 <- cbind(out.file2, out.file1)
+good6 <- cbind(good5, torf3$GenomePosition)
+
+colnames(good6) <- c("Observed", "NeutralExpectation", "PValues", "GenomePosition") #NEW- Pvalues changed from "GValues"
+
+if (length(out.file3)  > 0) {
+  
+  elsegood5 <- cbind(out.file3, out.file4) 
+  finalpotential <- rbind(good6, elsegood5)
+  
+  good6 <- finalpotential
+  
+} #else {good6 <- good6} }
+
+
+good6 <- as.data.frame(good6)
+
+
+spec <- g[,1]
+
+y <- 1- pbinom(spec, size=reps, prob=0.05, TRUE) #size changes with number of replicates
+
+bfc <- p.adjust(y, method = "fdr", n = length(spec)) 
+bfc <- as.data.frame(bfc)
+bfcg <- cbind(bfc, good6[,4])
+
+
+out.file3 <- numeric()
+out.file4 <- numeric()
+for (i in 1:nrow(bfcg)) {
+  number <- i
+  if (bfcg$bfc[i] < 0.05) {
+    n1 = 1
+    new <- cbind(number, n1)
+    out.file3 <-rbind(out.file3, new)
+  }
+  else if (bfcg$bfc[i] >= 0.05) {
+    n1 = 2
+    new <- cbind(number, n1)
+    out.file3 <-rbind(out.file3, new) 
+  }
+  
+  
+}
+
+step <- cbind(bfcg, out.file3)
+
+colnames(step) <- c("bfc", "Locus", "Num", "n1") 
+
+past<- 1
+
+f <- paste(lo, ".text", sep = "")
+
+q9 <- paste(q8, "/", sep = "")
+
+q10 <- paste(q9, f, sep= "")
+
+lst <- nrow(step)
+
+#Below determines where the various estimate blocks (if any) start and end 
+ 
+for (i in 1:nrow(step)) {
+  if (i == 1) {
+    if (step$n1[i] == 1 & step$n1[i + 1] == 1) {
+      i2 <- as.character(i)
+      i3<- as.character(step$Locus[i])
+      past[i]<- paste("firstfirstfirstfirstfirst width:", i2, i3)
+      sink(q10)
+      print(past)
+      sink()
+         } 
+    else if (step$n1[i] == 2) {
+      i2<- as.character(i)
+      i3<- as.character(step$Locus[i])
+      past[i]<- paste("NA xxxxxxxxxxxxxxxxxx", i2, i3)
+      sink(q10)
+      print(past)
+      sink() 
+    }
+      else if (step$n1[i] == 1 & step$n1[i + 1] == 2) {
+      i2<- as.character(i)
+      i3<- as.character(step$Locus[i])
+      past[i]<- paste("f1rst and lst width:", i2, i3)
+      sink(q10)
+      print(past)
+      sink() 
+    }
+	 } 
+  if (i != 1) {
+    if (step$n1[i] == 1 & (step$n1[i - 1]) == 2 & step$n1[i + 1] == 1)
+    {
+      i2 <- as.character(i)
+      i3 <- as.character(step$Locus[i])
+      past[i]<- paste("firstfirstfirstfirstfirst width:", i2, i3)
+      sink(q10)
+      print(past)
+      sink()
+    }  
+    else if (step$n1[i] == 1 & i == lst & step$n1[i - 1] == 1) {
+      i2 <- as.character(i)
+      i3<- as.character(step$Locus[i])
+      past[i]<- paste("lastlastlastlastlast width:", i2, i3)
+      sink(q10)
+      print(past)
+      sink()
+      }
+  
+    else if (step$n1[i] == 1 & step$n1[i - 1] == 2 & i == lst) {
+      i2 <- as.character(i)
+      i3<- as.character(step$Locus[i])
+      past[i]<- paste("f1rst and lst width:", i2, i3)
+      sink(q10)
+      print(past)
+      sink() 
+    }
+    else if (i == lst & step$n1[i] == 2) {
+      i2<- as.character(i)
+      i3<- as.character(step$Locus[i])
+      past[i]<- paste("NA xxxxxxxxxxxxxxxxxx", i2, i3)
+      sink(q10)
+      print(past)
+      sink() 
+    } 
+  } 
+  if (i != lst & i != 1){
+    if (step$n1[i] == 1 & step$n1[i + 1] == 2 & step$n1[i - 1] == 1) 
+    {
+      i2 <- as.character(i)
+      i3<- as.character(step$Locus[i])
+      past[i]<- paste("lastlastlastlastlast width:", i2, i3) 
+      sink(q10)
+      print(past)
+      sink()
+    }
+  if (step$n1[i] == 1 & step$n1[i + 1] == 2  & step$n1[i - 1] == 2) {
+    
+    i2 <- as.character(i)
+    i3<- as.character(step$Locus[i])
+    past[i]<- paste("f1rst and lst width:", i2, i3) 
+    sink(q10)
+    print(past)
+    sink()
+  }
+ }
+}
+
