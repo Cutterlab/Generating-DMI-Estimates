@@ -1,0 +1,760 @@
+initialize () {
+initializeSLiMOptions (nucleotideBased= T);
+
+        wq = "gt";
+
+
+	defineConstant("g2", wq);
+	defineConstant ("L",  41600000);
+	initializeAncestralNucleotides(randomNucleotides(L));
+
+
+
+
+		initializeMutationTypeNuc("m1", di1, "f", 0.0);
+		
+	
+	m1.color = "blue";
+	
+			m1.convertToSubstitution = F;
+	
+	initializeMutationTypeNuc("m15", di2 , "f", 0.0);
+	
+	m15.color = "purple";
+	
+			m15.convertToSubstitution = F;
+	
+	initializeMutationTypeNuc("m2", 1.0, "f", 0.0);
+	
+	m2.color = "blue";
+	
+			m2.convertToSubstitution = F;
+	
+	initializeMutationTypeNuc("m25", 1.0, "f", 0.0);
+	
+	m25.color = "red";
+	
+			m25.convertToSubstitution = F;
+			
+			
+	
+			initializeMutationTypeNuc("m3", 1.0, "f", 0.0);
+	
+	m3.color = "blue";
+	
+			m3.convertToSubstitution = F;
+
+	
+	initializeMutationTypeNuc("m35", 1.0, "f", 0.0);
+	
+	m35.color = "white";
+	
+			m35.convertToSubstitution = F;
+			
+	
+	initializeMutationTypeNuc("m4", 1.0, "f", 0.0);
+	
+	m4.color = "blue";
+	
+			m4.convertToSubstitution = F;
+
+	
+	initializeMutationTypeNuc("m45", 1.0, "f", 0.0);
+	
+	m45.color = "white";
+	
+			m45.convertToSubstitution = F;
+			
+			
+			initializeMutationTypeNuc("m5", 1.0, "f", 0.0);
+	
+	m5.color = "white";
+	
+			m5.convertToSubstitution = F;
+			
+			initializeMutationTypeNuc("m55", 1.0, "f", 0.0);
+	
+	m55.color = "white";
+	
+			m55.convertToSubstitution = F;
+			
+			
+			
+			initializeMutationTypeNuc("m6", 1.0, "f", 0.0);
+	
+	m6.color = "white";
+	
+			m6.convertToSubstitution = F;
+			
+			
+			initializeMutationTypeNuc("m65", 1.0, "f", 0.0);
+	
+	m65.color = "white";
+	
+			m65.convertToSubstitution = F;
+			
+			initializeMutationTypeNuc("m7", 1.0, "f", 0.0);
+	
+	m7.color = "white";
+	
+			m7.convertToSubstitution = F;
+			
+			initializeMutationTypeNuc("m75", 1.0, "f", 0.0);
+	
+	m75.color = "white";
+	
+			m75.convertToSubstitution = F;
+			
+			
+			initializeMutationTypeNuc("m8", 1.0, "f", 0.0);
+	
+	m8.color = "white";
+	
+			m8.convertToSubstitution = F;
+			
+			initializeMutationTypeNuc("m85", 1.0, "f", 0.0);
+	
+	m85.color = "white";
+	
+			m85.convertToSubstitution = F;
+			
+			
+			initializeMutationTypeNuc("m9", 1.0, "f", 0.0);
+	
+	m9.color = "white";
+	
+			m9.convertToSubstitution = F;
+			
+			
+			initializeMutationTypeNuc("m95", 1.0, "f", 0.0);
+	
+	m95.color = "white";
+	
+			m95.convertToSubstitution = F;
+			
+			initializeMutationTypeNuc("m10", 1.0, "f", 0.0);
+	
+	m10.color = "white";
+	
+			m10.convertToSubstitution = F;
+			
+			initializeMutationTypeNuc("m105", 1.0, "f", 0.0);
+	
+	m105.color = "white";
+	
+			m105.convertToSubstitution = F;
+			
+			
+			// neutral
+			
+initializeMutationTypeNuc("m100", 1.0, "f", 0.0);
+	
+	m100.color = "white";
+	
+			m100.convertToSubstitution = F;
+			
+			initializeMutationTypeNuc("m200", 1.0, "f", 0.0);
+	
+	m200.color = "white";
+	
+			m200.convertToSubstitution = F;
+	
+//ancestralalleles		
+			
+///
+	initializeMutationTypeNuc("m18", 1.0, "f", 0.0);
+	
+	m18.color = "white";
+	
+	m18.convertToSubstitution = F;
+	
+	
+	initializeMutationTypeNuc("m158", 1.0, "f", 0.0);
+	
+	m158.color = "white";
+	
+	m158.convertToSubstitution = F;
+	
+	
+	
+	initializeMutationTypeNuc("m28", 1.0, "f", 0.0);
+	
+	m28.color = "white";
+	
+	m28.convertToSubstitution = F;
+	
+	
+	initializeMutationTypeNuc("m258", 1.0, "f", 0.0);
+	
+	m258.color = "white";
+	
+	m258.convertToSubstitution = F;
+	
+	
+	
+	initializeMutationTypeNuc("m38", 1.0, "f", 0.0);
+	
+	m38.color = "white";
+	
+	m38.convertToSubstitution = F;
+	
+	
+	initializeMutationTypeNuc("m358", 1.0, "f", 0.0);
+	
+	m358.color = "white";
+	
+	m358.convertToSubstitution = F;
+	
+	
+	
+	
+		initializeMutationTypeNuc("m48", 1.0, "f", 0.0);
+	
+	m48.color = "white";
+	
+	m48.convertToSubstitution = F;
+	
+	
+	initializeMutationTypeNuc("m458", 1.0, "f", 0.0);
+	
+	m458.color = "white";
+	
+	m458.convertToSubstitution = F;
+	
+	
+	
+	
+		initializeMutationTypeNuc("m58", 1.0, "f", 0.0);
+	
+	m58.color = "white";
+	
+	m58.convertToSubstitution = F;
+	
+	
+	initializeMutationTypeNuc("m558", 1.0, "f", 0.0);
+	
+	m558.color = "white";
+	
+	m558.convertToSubstitution = F;
+	
+	
+	
+	
+		initializeMutationTypeNuc("m68", 1.0, "f", 0.0);
+	
+	m68.color = "white";
+	
+	m68.convertToSubstitution = F;
+	
+	
+	initializeMutationTypeNuc("m658", 1.0, "f", 0.0);
+	
+	m658.color = "white";
+	
+	m658.convertToSubstitution = F;
+	
+	
+	
+	
+		initializeMutationTypeNuc("m78", 1.0, "f", 0.0);
+	
+	m78.color = "white";
+	
+	m78.convertToSubstitution = F;
+	
+	
+	initializeMutationTypeNuc("m758", 1.0, "f", 0.0);
+	
+	m758.color = "white";
+	
+	m758.convertToSubstitution = F;
+	
+	
+	
+	
+	
+		initializeMutationTypeNuc("m88", 1.0, "f", 0.0);
+	
+	m88.color = "white";
+	
+	m88.convertToSubstitution = F;
+	
+	
+	initializeMutationTypeNuc("m858", 1.0, "f", 0.0);
+	
+	m858.color = "white";
+	
+	m858.convertToSubstitution = F;
+	
+	
+	
+	
+	
+	initializeMutationTypeNuc("m98", 1.0, "f", 0.0);
+	
+	m98.color = "white";
+	
+	m98.convertToSubstitution = F;
+	
+	
+	initializeMutationTypeNuc("m958", 1.0, "f", 0.0);
+	
+	m958.color = "white";
+	
+	m958.convertToSubstitution = F;
+	
+	
+	
+	
+	
+		initializeMutationTypeNuc("m108", 1.0, "f", 0.0);
+	
+	m108.color = "white";
+	
+	m108.convertToSubstitution = F;
+	
+	
+	initializeMutationTypeNuc("m1058", 1.0, "f", 0.0);
+	
+	m1058.color = "white";
+	
+	m1058.convertToSubstitution = F;
+	
+	
+				
+								
+		
+	// g1 genomic element type: uses m1 for all mutations
+	initializeGenomicElementType("g1", m4, 1.0, mmJukesCantor(0/3));
+	// uniform chromosome of length 100 kb with uniform recombination
+	initializeGenomicElement(g1, 0, L-1);
+	
+
+rates = c(4e-8, 1e-8, 4e-8, 0.5, 4e-8, 1e-8, 4e-8);
+	
+	ends = c(5199999, 15599999, 20799999, 20800000, 25999999, 36399999, 41599999);
+	
+	
+	initializeRecombinationRate(rates, ends);
+	
+	}
+
+
+
+// create a population of 1000 individuals
+1 {
+	sim.addSubpop("p1", 1000);
+	sim.rescheduleScriptBlock(s1, start=gt, end=gt);
+}
+
+
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m1,r1, nucleotide = "A");
+	
+	//blue- p1
+}
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m18,r1, nucleotide = "C");
+	
+	//blue- p1
+}
+
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m15,r2, nucleotide = "C");
+	
+	//blue- p1
+}
+
+
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m158,r2, nucleotide = "A");
+	
+	//blue- p1
+}
+
+
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m2,r3, nucleotide = "A");
+	
+	//blue- p1
+}
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m28,r3, nucleotide = "C");
+	
+	//blue- p1
+}
+
+
+
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m25,r4, nucleotide = "C");
+	
+	//blue- p1
+}
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m258,r4, nucleotide = "A");
+	
+	//blue- p1
+}
+
+
+
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m3,r5, nucleotide = "A");
+	
+	//blue- p1
+}
+
+
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m38,r5, nucleotide = "C");
+	
+	//blue- p1
+}
+
+
+
+
+
+
+
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m35,r6, nucleotide = "C");
+	
+	//blue- p1
+}
+
+
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m358,r6, nucleotide = "A");
+	
+	//blue- p1
+}
+
+
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m4,r7, nucleotide = "A");
+	
+	//blue- p1
+}
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m48,r7, nucleotide = "C");
+	
+	//blue- p1
+}
+
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m45,r8, nucleotide = "C");
+	
+	//blue- p1
+}
+
+
+
+
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m458,r8, nucleotide = "A");
+	
+	//blue- p1
+}
+
+
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m5,r9, nucleotide = "A");
+	
+	//blue- p1
+}
+
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m58,r9, nucleotide = "C");
+	
+	//blue- p1
+}
+
+
+
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m55,r10, nucleotide = "C");
+	
+	//blue- p1
+}
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m558,r10, nucleotide = "A");
+	
+	//blue- p1
+}
+
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m6,r11, nucleotide = "A");
+	
+	//blue- p1
+}
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m68,r11, nucleotide = "C");
+	
+	//blue- p1
+}
+
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m65,r12, nucleotide = "C");
+	
+	//blue- p1
+}
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m658,r12, nucleotide = "A");
+	
+	//blue- p1
+}
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m7,r13, nucleotide = "A");
+	
+	//blue- p1
+}
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m78,r13, nucleotide = "C");
+	
+	//blue- p1
+}
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m75,r14, nucleotide = "C");
+	
+	//blue- p1
+}
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m758,r14, nucleotide = "A");
+	
+	//blue- p1
+}
+
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m8,r15, nucleotide = "A");
+	
+	//blue- p1
+}
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m88,r15, nucleotide = "C");
+	
+	//blue- p1
+}
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m85,r16, nucleotide = "C");
+	
+	//blue- p1
+}
+
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m858,r16, nucleotide = "A");
+	
+	//blue- p1
+}
+
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m9,r17, nucleotide = "A");
+	
+	//blue- p1
+}
+
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m98,r17, nucleotide = "C");
+	
+	//blue- p1
+}
+
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m95,r18, nucleotide = "C");
+	
+	//blue- p1
+}
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m958,r18, nucleotide = "A");
+	
+	//blue- p1
+}
+
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m10,r19, nucleotide = "A");
+	
+	//blue- p1
+}
+
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m108,r19, nucleotide = "C");
+	
+	//blue- p1
+}
+
+1 late () {
+	g = p1.individuals.genome2;
+	g.addNewDrawnMutation(m105,r20, nucleotide = "C");
+	
+	//blue- p1
+}
+
+
+1 late () {
+	g = p1.individuals.genome1;
+	g.addNewDrawnMutation(m1058,r20, nucleotide = "A");
+	
+	//blue- p1
+}
+
+
+1 late () {
+g = p1.individuals.genome1;
+target1 = sample (g, N);
+q = 0:19999;
+b = q * (2080);
+target1.addNewDrawnMutation(m100, b, nucleotide = "A");
+
+//white- p1
+}
+
+1 late () {
+g = p1.individuals.genome2;
+target1 = sample (g, N);
+q = 0:19999;
+d = q * (2080);
+target1.addNewDrawnMutation(m200, d, nucleotide = "C");
+
+// yellow- p2
+}
+
+
+
+s1 1000 late() { 
+	sim.outputMutations(sim.mutations);
+}
+
+fitness(m1) { 
+	if (genome1.containsMarkerMutation(m15,  r2)) return s;
+	else if (genome2.containsMarkerMutation(m15, r2)) return s;
+	else return relFitness; }
+	
+	fitness(m2) { 
+	if (genome1.containsMarkerMutation(m25,  r4)) return s;
+	else if (genome2.containsMarkerMutation(m25, r4)) return s;
+	else return relFitness; }
+	
+		fitness(m3) { 
+	if (genome1.containsMarkerMutation(m35,  r6)) return s;
+	else if (genome2.containsMarkerMutation(m35, r6)) return s;
+	else return relFitness; }
+	
+	fitness(m4) { 
+	if (genome1.containsMarkerMutation(m45,  r8)) return s;
+	else if (genome2.containsMarkerMutation(m45, r8)) return s;
+	else return relFitness; }
+	
+		fitness(m5) { 
+	if (genome1.containsMarkerMutation(m55,  r10)) return s;
+	else if (genome2.containsMarkerMutation(m55, r10)) return s;
+	else return relFitness; }
+	
+	
+	fitness(m6) { 
+	if (genome1.containsMarkerMutation(m65,  r12)) return s;
+	else if (genome2.containsMarkerMutation(m65, r12)) return s;
+	else return relFitness; }
+	
+	
+	
+	fitness(m7) { 
+	if (genome1.containsMarkerMutation(m75,  r14)) return s;
+	else if (genome2.containsMarkerMutation(m75, r14)) return s;
+	else return relFitness; }
+	
+	
+	
+	fitness(m8) { 
+	if (genome1.containsMarkerMutation(m85,  r16)) return s;
+	else if (genome2.containsMarkerMutation(m85, r16)) return s;
+	else return relFitness; }
+	
+	
+	fitness(m9) { 
+	if (genome1.containsMarkerMutation(m95,  r18)) return s;
+	else if (genome2.containsMarkerMutation(m95, r18)) return s;
+	else return relFitness; }
+	
+	
+	fitness(m10) { 
+	if (genome1.containsMarkerMutation(m105,  r20)) return s;
+	else if (genome2.containsMarkerMutation(m105, r20)) return s;
+	else return relFitness; }
+
