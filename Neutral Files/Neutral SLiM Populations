@@ -1,0 +1,140 @@
+The Below is the same as “DMI SLiM Script” except that the loci where the DMIs usually are (2601040 bp & 31201040 bp) are neutral and confer no negative fitness effects. This Script is repeated for each generation time-point
+
+
+initialize () {
+initializeSLiMOptions (nucleotideBased= T);
+
+defineConstant("gt", 10); //Defines Generation time-point. Repeat this script for each generation time point
+  
+	defineConstant ("L",  41600000);
+	initializeAncestralNucleotides(randomNucleotides(L));
+
+
+
+
+		initializeMutationTypeNuc("m1", 1.0, "f", 0.0);
+		
+	
+	m1.color = "blue";
+	
+			m1.convertToSubstitution = F;
+	
+	initializeMutationTypeNuc("m15", 1.0, "f", 0.0);
+	
+	m15.color = "purple";
+	
+			m15.convertToSubstitution = F;
+	
+	initializeMutationTypeNuc("m2", 1.0, "f", 0.0);
+	
+	m2.color = "orange";
+	
+			m2.convertToSubstitution = F;
+	
+	initializeMutationTypeNuc("m25", 1.0, "f", 0.0);
+	
+	m25.color = "red";
+	
+			m25.convertToSubstitution = F;
+			
+			
+			initializeMutationTypeNuc("m5", 1.0, "f", 0.0);
+	
+	m5.color = "white";
+	
+			m5.convertToSubstitution = F;
+
+
+	initializeMutationTypeNuc("m6", 1.0, "f", 0.0);
+	
+	m6.color = "yellow";
+	
+			m6.convertToSubstitution = F;
+			
+			
+	// g1 genomic element type: uses m1 for all mutations
+	initializeGenomicElementType("g1", m6, 1.0, mmJukesCantor(0/3));
+	// uniform chromosome of length 100 kb with uniform recombination
+	initializeGenomicElement(g1, 0, L-1);
+	
+
+rates = c(4e-8, 1e-8, 4e-8, 0.5, 4e-8, 1e-8, 4e-8);
+	
+	ends = c(5199999, 15599999, 20799999, 20800000, 25999999, 36399999, 41599999);
+	
+	
+	initializeRecombinationRate(rates, ends);
+	
+	}
+
+
+
+// create a population of 1000 individuals
+1 {
+	sim.addSubpop("p1", 1000);
+}
+
+1 late () { 
+g = p1.individuals.genome1;
+g.addNewDrawnMutation(m1,2601040, nucleotide = "A");
+
+}
+
+1 late () {
+g = p1.individuals.genome1;
+g.addNewDrawnMutation(m15, 31201040, nucleotide = "A" );
+
+}
+
+
+1 late () {
+g = p1.individuals.genome2;
+g.addNewDrawnMutation(m2, 2601040, nucleotide = "C" );
+}
+
+
+1 late () {
+g = p1.individuals.genome2;
+g.addNewDrawnMutation(m25, 31201040, nucleotide = "C" );
+}
+
+
+
+1 late () {
+g = p1.individuals.genome1;
+target1 = sample (g, N);
+q = 0:19999;
+b = q * (2080);
+target1.addNewDrawnMutation(m5, b, nucleotide = "A");
+
+}
+
+1 late () {
+g = p1.individuals.genome2;
+target1 = sample (g, N);
+q = 0:19999;
+d = q * (2080);
+target1.addNewDrawnMutation(m6, d, nucleotide = "C");
+
+}
+
+
+
+1 late () {
+g = p1.individuals.genome1;
+target1 = sample (g, N);
+target1.addNewDrawnMutation(m5, 41599999, nucleotide = "A");
+}
+
+
+1 late () {
+g = p1.individuals.genome2;
+target1 = sample (g, N);
+target1.addNewDrawnMutation(m6, 41599999, nucleotide = "C");
+}
+
+
+GT late() { 
+	sim.outputMutations(sim.mutations);
+}
+
