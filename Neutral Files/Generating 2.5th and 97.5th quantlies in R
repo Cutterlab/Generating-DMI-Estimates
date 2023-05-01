@@ -1,0 +1,61 @@
+The below R Script is determining the 2.5th and 97.5th quantiles for genomic frequencies for each locus in a neutral population
+
+
+args <- commandArgs(trailingOnly = TRUE)
+gt=as.numeric(commandArgs(TRUE)[1])
+if (is.na(gt)) { gt=10}
+#population
+p1 <- "~/scratch/oneway/neutral/"  #”oneway” can be replaced with “twowaydom” or “twoway rec” #Retrieve neutral genomic frequencies files from neutral populations outputted from SLiM
+
+p2 <- paste(p1, gt, sep="")
+p3 <- paste(p2, "gt", sep= "")
+repsn= 1000 #1000 replicate populations
+n = 1000 #1000 individuals in each population
+
+rn <- sample(1:repsn, repsn) 
+
+vcffiles = dir(path = p3, pattern=".txt") 
+
+out.file<- numeric()
+library(dplyr)
+library(tidyr)
+#format genomic frequencies files
+for (i in rn){  #length(vcffiles))
+  number <- i 
+  setwd(p3)
+  vcf = read.table(vcffiles[i], head = F) 
+  dataorder <- vcf[order(vcf$V7),] 
+  loci <- as.numeric(dataorder$V7) 
+  loci <- sort(loci, decreasing = FALSE) 
+  loci <- unique(loci) 
+  data <- filter(dataorder, V13 == "A")  
+  V7 <- as.numeric(data$V7) 
+  diff <- setdiff(loci, V7) 
+  data <- cbind(V7, data$V12)
+  lngth <- length(diff)
+  b <-  list(rep(0, lngth)) 
+  diffdata <- data.frame (diff, b) 
+  names(diffdata)[1] <- "V7"
+  names(diffdata)[2] <- "V2"
+  data<- as.data.frame(data)
+  good <- rbind(diffdata, data) 
+  good <- good[order(good$V7),]
+  df5 = cbind(good, number)
+  out.file <-rbind(out.file, df5)
+}
+
+
+freq2 <- out.file$V2/2
+freq2<- freq2/1000 #Divide by population size for genomic frequencies fraction
+out.file <- cbind(freq2, out.file)
+out.file <- cbind(out.file[,1:2], out.file[,4])
+
+colnames(out.file) = c("Frequency","Genome","Population") #Table generated is the 
+new_data <- out.file %>% 
+  pivot_wider(names_prefix = "ColB", names_from = Population, values_from = Frequency)
+
+library(matrixStats)
+q <- as.matrix(new_data[,2:(repsn+1)]) #changes with num of columns/reps
+y <- rowQuantiles(q, probs= c(0.025, 0.975)) #Determine 2.5th and 97.5th quantile of frequencies for each locus/row
+ 
+print(y) #Print 2.5th and 97.5th neutral quantiles for each locus/row
