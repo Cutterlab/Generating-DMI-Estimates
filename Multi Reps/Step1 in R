@@ -5,7 +5,7 @@ if (is.na(gt)) { gt=10}
 reps = 20
 
 
-p1 <- "~/scratch/poneway/neutral/" #"~/scratch/nov18/"          
+p1 <- "~/scratch/multi/neutral/"      
 p2 <- paste(p1, gt, sep="")
 p3 <- paste(p2, "gt", sep= "")
 n = 1000
@@ -34,7 +34,7 @@ lo = i
 
 rn <- sample(1:reps, reps)
 
-q1 <- "~/scratch/multi20/"    ##"~/scratch/nov18/"          
+q1 <- "~/scratch/multi20/"          
 q2 <- paste(q1, gt, sep="")
 q3 <- paste(q2, ".", sep= "")
 q4 <- paste(q3, s, sep= "")
