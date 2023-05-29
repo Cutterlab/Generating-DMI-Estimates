@@ -1,4 +1,4 @@
-The Below is the same as “DMI SLiM Script” except that the loci where the DMIs usually are (2601040 bp & 31201040 bp) are neutral and confer no negative fitness effects. This Script is repeated for each generation time-point
+The below is the same as “DMI SLiM Script” except that the loci where the DMIs usually are (2601040 bp & 31201040 bp) are neutral and confer no negative fitness effects. This Script is repeated for each generation time-point
 
 
 initialize () {
