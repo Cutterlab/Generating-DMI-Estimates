@@ -1,4 +1,4 @@
-The below script generations 1000 neutral populations in SLiM. Set X to the number of generation timepoints
+The below script generates 1000 neutral populations in SLiM. Set X to the number of generation timepoints
 
 
 #!/bin/sh
