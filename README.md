@@ -1,12 +1,12 @@
 Scripts for assessing through forward simulation the power of evolve and resequence experimental evolution of hybrid populations to map DMI loci. We simulate various biologically relevant parameters such as one-way versus two-way incompatibility type, number of incompatibilities, selection strength, recombination rate, and dominance interactions to determine which mapping feasibility and sensitivity. We also simulated the parameters under direct control of an experimenter, including duration of experimental evolution and number of replicate populations.
 
-Description of Scripts
+Description of Scripts:
 
-      Two-Loci DMI Directory
+**Two-Loci DMI Directory**
 
 This directory contains the scripts to generate estimates of DMI loci expressed for two-loci      incompatibilities.
 
-- Command Line Files Directory
+_Command Line Files Directory_
 
 This directory contains scripts executed at the command line.
 
@@ -18,7 +18,7 @@ This script generates genomic data for 500 sets of 10 replicate populations with
 
 This script summarizes estimate summaries from 500 estimate files generated from 10 replicate SLiM populations for a particular parameter set (defined by generation timepoint (gt), selection coefficient (s), and dominance values (y) (z).
 
-  Neutral Files Directory
+_Neutral Files Directory_
 
 This directory contains scripts for generating neutral simulations.
 
@@ -38,7 +38,7 @@ This R script determines the 2.5th and 97.5th quantiles for genomic frequencies 
 
 This script runs the above “Generating 2.5th and 97.5th quantiles in R” file with variable generation timepoints.
 
-  R Files Directory
+_R Files Directory_
 
 This directory contains the scripts that produce DMI loci estimates.
 
@@ -50,7 +50,7 @@ This script contains the R file that produces DMI loci estimates for a specific 
 
 This script retrieves the Estimate output files produced from the above script to summarize them in readable tables.
 
-  MultiReps Directory
+**MultiReps Directory**
 
 - SliM Populations
 
