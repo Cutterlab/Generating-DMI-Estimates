@@ -1,12 +1,12 @@
 Scripts for assessing through forward simulation the power of evolve and resequence experimental evolution of hybrid populations to map DMI loci. We simulate various biologically relevant parameters such as one-way versus two-way incompatibility type, number of incompatibilities, selection strength, recombination rate, and dominance interactions to determine which mapping feasibility and sensitivity. We also simulated the parameters under direct control of an experimenter, including duration of experimental evolution and number of replicate populations.
 
-- Description of Scripts -
+Description of Scripts
 
       Two-Loci DMI Directory
 
 This directory contains the scripts to generate estimates of DMI loci expressed for two-loci      incompatibilities.
 
-      Command Line Files Directory
+- Command Line Files Directory - 
 
 This directory contains scripts executed at the command line.
 
